@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import db from "../config/database.js";
 import bcrypt from "bcrypt";
 
@@ -6,8 +5,6 @@ export async function signUp(req, res) {
   const { name, email, password, confirmPassword } = req.body;
 
   try {
-    const now = dayjs().format("YYYY-MM-DD");
-
     // password crypt
     const salt = await bcrypt.genSalt(10);
     const passHash = await bcrypt.hash(password, salt);
@@ -15,15 +12,34 @@ export async function signUp(req, res) {
     await db.query(
       `
         INSERT INTO users
-            (name, email, password,"createdAt")
+            (name, email, password)
             VALUES
-            ($1, $2, $3, '${now}')
+            ($1, $2, '${passHash}')
         `,
-      [name, email, passHash]
+      [name, email]
     );
 
     return res.sendStatus(201);
   } catch (error) {
     return res.status(500).send("Sever error: " + error);
+  }
+}
+
+export async function signIn(req, res) {
+  const { userId, token } = res.locals.session;
+
+  try {
+    await db.query(
+      `
+        INSERT INTO sessions
+        ("userId", token)
+        VALUES
+        ('${userId}', '${token}');
+        `
+    );
+
+    return res.status(200).send({ token });
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
   }
 }
