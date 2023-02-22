@@ -22,7 +22,7 @@ export async function authValidation(req, res, next) {
 
     res.locals.session = session;
 
-    res.status(200).send(session);
+    next();
   } catch (error) {
     res.status(500).send(error);
   }
