@@ -26,3 +26,12 @@ export async function postUrl(req, res) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getUrlId(req, res) {
+  const { foundUrl } = res.locals;
+  try {
+    res.status(200).send(foundUrl);
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}

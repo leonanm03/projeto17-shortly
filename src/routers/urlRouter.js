@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { postUrl } from "../controllers/url.js";
+import { getUrlId, postUrl } from "../controllers/url.js";
 import { authValidation } from "../middlewares/authMid.js";
 import validateSchema from "../middlewares/schemaValidation.js";
-import { postUrlMid } from "../middlewares/urlMid.js";
+import { getUrlIdMid, postUrlMid } from "../middlewares/urlMid.js";
 import { postUrlSchema } from "../models/urlSchema.js";
 
 const router = Router();
@@ -14,5 +14,7 @@ router.post(
   postUrlMid,
   postUrl
 );
+
+router.get("/urls/:id", getUrlIdMid, getUrlId);
 
 export default router;
