@@ -16,9 +16,7 @@ export async function signUpValidation(req, res, next) {
     );
 
     const userAlreadyExists = result.rowCount !== 0;
-    if (userAlreadyExists) {
-      return res.sendStatus(409);
-    }
+    if (userAlreadyExists) return res.sendStatus(409);
 
     // password crypt
     const salt = await bcrypt.genSalt(10);
@@ -48,18 +46,14 @@ export async function signInValidation(req, res, next) {
       [email]
     );
     const invalidUser = result.rowCount === 0;
-    if (invalidUser) {
-      return res.sendStatus(401);
-    }
+    if (invalidUser) return res.sendStatus(401);
 
     const user = result.rows[0];
 
     const checkPassword = await bcrypt.compare(password, user.password);
     const wrongPassword = !checkPassword;
 
-    if (wrongPassword) {
-      return res.status(401).send("wrong password");
-    }
+    if (wrongPassword) return res.sendStatus(401);
 
     res.locals.session = {
       userId: user.id,
