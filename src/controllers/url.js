@@ -35,3 +35,12 @@ export async function getUrlId(req, res) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getShortUrl(req, res) {
+  const { foundUrl } = res.locals;
+  try {
+    res.redirect(foundUrl);
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}

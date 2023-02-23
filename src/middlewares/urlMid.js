@@ -42,3 +42,36 @@ export async function getUrlIdMid(req, res, next) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getShortUrlMid(req, res, next) {
+  const { shortUrl } = req.params;
+
+  try {
+    const result = await db.query(
+      `
+        SELECT url FROM urls
+        WHERE "shortUrl" = $1
+      `,
+      [shortUrl]
+    );
+
+    const absentUrl = result.rowCount === 0;
+    if (absentUrl) return res.status(404).send("url missing");
+
+    await db.query(
+      `
+      UPDATE urls
+      SET "visitCount" = "visitCount" + 1
+      WHERE "shortUrl" = $1;
+      `,
+      [shortUrl]
+    );
+
+    const foundUrl = result.rows[0].url;
+
+    res.locals.foundUrl = foundUrl;
+    next();
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}

@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getUrlId, postUrl } from "../controllers/url.js";
+import { getShortUrl, getUrlId, postUrl } from "../controllers/url.js";
 import { authValidation } from "../middlewares/authMid.js";
 import validateSchema from "../middlewares/schemaValidation.js";
-import { getUrlIdMid, postUrlMid } from "../middlewares/urlMid.js";
+import {
+  getShortUrlMid,
+  getUrlIdMid,
+  postUrlMid,
+} from "../middlewares/urlMid.js";
 import { postUrlSchema } from "../models/urlSchema.js";
 
 const router = Router();
@@ -16,5 +20,5 @@ router.post(
 );
 
 router.get("/urls/:id", getUrlIdMid, getUrlId);
-
+router.get("/urls/open/:shortUrl", getShortUrlMid, getShortUrl);
 export default router;
