@@ -96,3 +96,28 @@ export async function getMeMid(req, res, next) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getRankingMid(req, res, next) {
+  try {
+    const result = await db.query(
+      `SELECT users.id, users.name,
+         COALESCE(links_count, 0) AS "linksCount",
+          COALESCE(visit_count, 0) AS "visitCount"
+          FROM users
+              LEFT JOIN (
+                SELECT "userId", COUNT(*) AS links_count,
+                SUM("visitCount") AS visit_count
+                FROM urls
+                  GROUP BY "userId"
+              )
+              AS url_counts ON users.id = url_counts."userId"
+    ORDER BY visit_count DESC NULLS LAST, links_count DESC NULLS LAST, users.id ASC
+    LIMIT 10;`
+    );
+
+    res.locals.rankingList = result.rows;
+    next();
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}

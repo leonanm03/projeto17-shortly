@@ -48,3 +48,13 @@ export async function getMe(req, res) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getRanking(req, res) {
+  const { rankingList } = res.locals;
+
+  try {
+    return res.status(200).send(rankingList);
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}
