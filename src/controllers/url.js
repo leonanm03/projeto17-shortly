@@ -44,3 +44,13 @@ export async function getShortUrl(req, res) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function deleteUrlId(req, res) {
+  const id = res.locals.urlId;
+  try {
+    await db.query("DELETE FROM urls WHERE id = $1;", [id]);
+    res.sendStatus(204);
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}

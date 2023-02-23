@@ -1,8 +1,14 @@
 import { Router } from "express";
-import { getShortUrl, getUrlId, postUrl } from "../controllers/url.js";
+import {
+  deleteUrlId,
+  getShortUrl,
+  getUrlId,
+  postUrl,
+} from "../controllers/url.js";
 import { authValidation } from "../middlewares/authMid.js";
 import validateSchema from "../middlewares/schemaValidation.js";
 import {
+  deleteUrlIdMid,
   getShortUrlMid,
   getUrlIdMid,
   postUrlMid,
@@ -21,4 +27,6 @@ router.post(
 
 router.get("/urls/:id", getUrlIdMid, getUrlId);
 router.get("/urls/open/:shortUrl", getShortUrlMid, getShortUrl);
+router.delete("/urls/:id", authValidation, deleteUrlIdMid, deleteUrlId);
+
 export default router;

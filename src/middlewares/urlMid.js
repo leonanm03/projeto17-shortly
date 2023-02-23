@@ -75,3 +75,25 @@ export async function getShortUrlMid(req, res, next) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function deleteUrlIdMid(req, res, next) {
+  const { userId } = res.locals.session;
+  const { id } = req.params;
+
+  try {
+    const result = await db.query("SELECT * FROM urls WHERE id = $1;", [id]);
+
+    const absentUrl = result.rowCount === 0;
+    if (absentUrl) return res.status(404).send();
+
+    const foundUrl = result.rows[0];
+
+    const notOwner = userId !== foundUrl.userId;
+    if (notOwner) return res.status(401).send();
+
+    res.locals.urlId = foundUrl.id;
+    next();
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}
