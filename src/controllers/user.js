@@ -38,3 +38,13 @@ export async function signIn(req, res) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getMe(req, res) {
+  const { userData } = res.locals;
+
+  try {
+    res.status(200).send(userData);
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}

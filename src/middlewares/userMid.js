@@ -65,3 +65,34 @@ export async function signInValidation(req, res, next) {
     return res.status(500).send("server error: " + error);
   }
 }
+
+export async function getMeMid(req, res, next) {
+  const id = res.locals.session.userId;
+
+  console.log(id);
+
+  try {
+    const result = await db.query(
+      `SELECT users.id, users.name, SUM(urls."visitCount") AS "visitCount", 
+            json_agg(
+              json_build_object(
+                'id', urls.id, 'shortUrl', urls."shortUrl", 'url', urls.url, 'visitCount', urls."visitCount"
+                )
+              ) AS "shortenedUrls"
+            FROM users
+            JOIN urls ON users.id = urls."userId"
+            WHERE users.id = $1
+            GROUP BY users.id;`,
+      [id]
+    );
+    const absentUrls = result.rowCount === 0;
+    if (absentUrls) return res.status(404).send("No urls");
+
+    const user = result.rows[0];
+
+    res.locals.userData = user;
+    next();
+  } catch (error) {
+    return res.status(500).send("server error: " + error);
+  }
+}
