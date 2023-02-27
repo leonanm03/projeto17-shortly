@@ -53,36 +53,6 @@ ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
 
 
 --
--- Name: teste; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.teste (
-    id integer NOT NULL,
-    name character varying(50)
-);
-
-
---
--- Name: teste_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.teste_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: teste_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.teste_id_seq OWNED BY public.teste.id;
-
-
---
 -- Name: urls; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -157,13 +127,6 @@ ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.ses
 
 
 --
--- Name: teste id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.teste ALTER COLUMN id SET DEFAULT nextval('public.teste_id_seq'::regclass);
-
-
---
 -- Name: urls id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -184,13 +147,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Data for Name: teste; Type: TABLE DATA; Schema: public; Owner: -
---
-
-INSERT INTO public.teste VALUES (1, 'Peppa Pig');
-
-
---
 -- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -207,13 +163,6 @@ INSERT INTO public.teste VALUES (1, 'Peppa Pig');
 --
 
 SELECT pg_catalog.setval('public.sessions_id_seq', 1, false);
-
-
---
--- Name: teste_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.teste_id_seq', 1, true);
 
 
 --
@@ -247,22 +196,6 @@ ALTER TABLE ONLY public.sessions
 
 
 --
--- Name: teste teste_name_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.teste
-    ADD CONSTRAINT teste_name_key UNIQUE (name);
-
-
---
--- Name: teste teste_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.teste
-    ADD CONSTRAINT teste_pkey PRIMARY KEY (id);
-
-
---
 -- Name: urls urls_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -276,14 +209,6 @@ ALTER TABLE ONLY public.urls
 
 ALTER TABLE ONLY public.urls
     ADD CONSTRAINT "urls_shortUrl_key" UNIQUE ("shortUrl");
-
-
---
--- Name: urls urls_url_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.urls
-    ADD CONSTRAINT urls_url_key UNIQUE (url);
 
 
 --
